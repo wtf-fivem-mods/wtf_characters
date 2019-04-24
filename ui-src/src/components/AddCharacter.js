@@ -5,18 +5,20 @@ import actions from '../actions'
 export default connect(
   () => ({}),
   actions
-)(({ saveCharacter }) => {
+)(({ saveCharacter, match, history }) => {
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
+  function onSubmit(e) {
+    e.preventDefault()
+    saveCharacter(firstName, lastName)
+  }
+  function goBack() {
+    history.goBack()
+  }
   return (
     <div>
       <h1>Add Character</h1>
-      <form
-        onSubmit={e => {
-          e.preventDefault()
-          saveCharacter(firstName, lastName)
-        }}
-      >
+      <form onSubmit={onSubmit}>
         <input
           value={firstName}
           onChange={e => setFirstName(e.target.value)}
@@ -36,6 +38,12 @@ export default connect(
         />
         <br />
         <button type="submit">Submit</button>
+        {match && match.path === '/add_character' ? (
+          <>
+            <br />
+            <button onClick={goBack}>Go Back</button>
+          </>
+        ) : null}
       </form>
     </div>
   )

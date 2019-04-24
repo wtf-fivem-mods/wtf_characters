@@ -1,29 +1,44 @@
 import React from 'react'
-import { Route, withRouter } from 'react-router'
+import { Route } from 'react-router'
 import { connect } from 'redux-zero/react'
 import styled, { createGlobalStyle } from 'styled-components/macro'
 import actions from '../actions'
-import Home from './Home'
 import AddCharacter from './AddCharacter'
+import Home from './Home'
 
-export default withRouter(
-  connect(
-    ({ characters, shown }) => ({ characters, shown }),
-    actions
-  )(({ characters, shown }) => (
+export default connect(
+  ({ steamID, shown, characters }) => ({
+    shown,
+    hasSteamID: steamID !== null,
+    hasCharacters: characters.length > 0,
+  }),
+  actions
+)(({ hasSteamID, shown, hasCharacters, showUI }) => {
+  function renderRoot() {
+    return hasCharacters ? <Home /> : <AddCharacter />
+  }
+  function dismiss() {
+    showUI(false)
+  }
+  return (
     <>
       <GlobalStyle />
       <App shown={shown}>
-        <Route
-          exact
-          path="/"
-          render={() => (characters.length > 0 ? <Home /> : <AddCharacter />)}
-        />
-        <Route path="/add_character" component={AddCharacter} />
+        {hasSteamID ? (
+          <>
+            <Route exact path="/" render={renderRoot} />
+            <Route path="/add_character" component={AddCharacter} />
+          </>
+        ) : (
+          <>
+            <h1>No Steam ID</h1>
+            <button onClick={dismiss}>Dismiss</button>
+          </>
+        )}
       </App>
     </>
-  ))
-)
+  )
+})
 
 const App = styled.div`
   width: 500px;
