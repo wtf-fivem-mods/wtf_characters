@@ -14,6 +14,12 @@ window.addEventListener('message', e => {
     case 'open':
       boundActions.showUI(true)
       break
+    case 'steamid':
+      boundActions.setSteamID(e.data.steamid)
+      break
+    case 'nousers':
+      boundActions.setNewUser(true)
+      break
     default:
   }
 })

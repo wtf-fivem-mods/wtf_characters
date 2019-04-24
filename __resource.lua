@@ -1,6 +1,14 @@
 client_scripts {
-    'lib.lua',
+    '@wtf_redis/lib/redis.lua',
+
+    'lib/db.lua',
+    'lib/lib.lua',
+    'lib/internal.lua',
     'client/client.lua',
+}
+
+server_scripts {
+    'server/server.lua',
 }
 
 ui_page 'ui-build/index.html'

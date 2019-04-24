@@ -11,6 +11,8 @@ const actions = store => ({
     fetch('http://wtf_characters/selectCharacter', { method: 'POST' }) // ignore whether it returns or not
     return actions(store).showUI(state, false)
   },
+  setNewUser: (state, newUser) => ({ newUser }),
+  setSteamID: (state, steamID) => ({ steamID }),
 })
 
 export default actions
