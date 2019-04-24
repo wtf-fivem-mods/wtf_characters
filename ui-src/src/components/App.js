@@ -1,21 +1,29 @@
 import React from 'react'
-import { Route } from 'react-router'
+import { Route, withRouter } from 'react-router'
 import { connect } from 'redux-zero/react'
 import styled, { createGlobalStyle } from 'styled-components/macro'
 import actions from '../actions'
 import Home from './Home'
+import AddCharacter from './AddCharacter'
 
-export default connect(
-  ({ shown }) => ({ shown }),
-  actions
-)(({ shown }) => (
-  <>
-    <GlobalStyle />
-    <App shown={shown}>
-      <Route exact path="/" component={Home} />
-    </App>
-  </>
-))
+export default withRouter(
+  connect(
+    ({ characters, shown }) => ({ characters, shown }),
+    actions
+  )(({ characters, shown }) => (
+    <>
+      <GlobalStyle />
+      <App shown={shown}>
+        <Route
+          exact
+          path="/"
+          render={() => (characters.length > 0 ? <Home /> : <AddCharacter />)}
+        />
+        <Route path="/add_character" component={AddCharacter} />
+      </App>
+    </>
+  ))
+)
 
 const App = styled.div`
   width: 500px;

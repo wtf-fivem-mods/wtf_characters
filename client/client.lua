@@ -1,25 +1,46 @@
-RegisterNUICallback('selectCharacter', function()
+RegisterNUICallback('selectCharacter', function(data, cb)
+    cb("ok")
+
+    local character = GetCharacter(data)
+    print('Character ID: '..tostring(character.id))
+    print('Character firstName: '..tostring(character.firstName))
+    print('Character lastName: '..tostring(character.lastName))
+
     SetNuiFocus(false, false)
     ResetCamera()
 end)
 
-local function onReceivedSteamID(steamid)
-    SendNUIMessage({type = "steamid", steamid = steamid})
+RegisterNUICallback('saveCharacter', function(data, cb)
+    cb("ok")
+    SetNuiFocus(false, false)
+    ResetCamera()
 
-    local hasUsers = HasUsers(steamid)
-    if not hasUsers then
-        SendNUIMessage({type = "nousers"})
+    local character = SaveCharacter(data)
+    print('Character ID: '..tostring(character.id))
+    print('Character firstName: '..tostring(character.firstName))
+    print('Character lastName: '..tostring(character.lastName))
+end)
+
+local function onReceivedSteamID(steamID)
+    SendNUIMessage({type = "steamID", steamID = steamID})
+
+    local characters = GetCharacters(steamID)
+    if characters ~= nil then
+        SendNUIMessage({type = "characters", characters = characters})
     end
 
     SetNuiFocus(false, false) -- debug reset on load
 
-    DoSelectionCamera()
+    Citizen.CreateThread(function()
+        DoSelectionCamera()
+    end)
 
+    Citizen.Wait(500)
     SetNuiFocus(true, true)
     SendNUIMessage({type = "open"})
 end
 
-RegisterNetEvent("wtf_characters:steamid")
-AddEventHandler("wtf_characters:steamid", function(steamid)
-    onReceivedSteamID(steamid)
+RegisterNetEvent("wtf_characters:steamID")
+AddEventHandler("wtf_characters:steamID", function(steamID)
+    onReceivedSteamID(steamID)
 end)

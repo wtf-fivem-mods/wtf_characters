@@ -1,20 +1,23 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
 import { connect } from 'redux-zero/react'
 import styled, { createGlobalStyle } from 'styled-components/macro'
 import actions from '../actions'
 import gtaBg from './images/gtabg.png'
 
+const fakeCharacter = { id: 0, firstName: 'Tom', lastName: 'Foolery' }
+
 export default connect(
   ({ shown }) => ({ shown }),
   actions
-)(({ shown, showUI }) => (
+)(({ shown, showUI, setCharacters, setSteamID }) => (
   <Header>
     <GTABackgroundStyle />
     <nav>
       <span>DEBUG MENU</span>
-      <Link to="/">Home</Link>
-      <Link to="/test">Test</Link>
+      <button onClick={() => setSteamID('abc123')}>Set SteamID</button>
+      <button onClick={() => setCharacters([fakeCharacter])}>
+        1 Fake Character
+      </button>
       {shown ? (
         <button onClick={() => showUI(false)}>Hide</button>
       ) : (

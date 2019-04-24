@@ -2,20 +2,28 @@ DB = {}
 local keyRoot = "wtf_characters"
 
 local function key(id, ...)
+    local s = ""
     local args = {...}
-    local s = args[1]
-    for i=2, #args do
-        s = s .. ':' .. args[i]
+    if #args > 0 then
+        s = ":"..args[1]
+        for i=2, #args do
+            s = s ..":".. args[i]
+        end
     end
-    return string.format("%s:%s:%s", keyRoot, id, s)
+    return keyRoot..":"..id..s
 end
 
-function DB.HasUsers(steamid)
-    local res = Redis.exists(key(steamid))
-    return res
+function DB.GetCharacter(steamID, idx)
+    return Redis.lindex(key(steamID), idx)
 end
 
-function DB.GetUser(steamid)
-    local res, err = Redis.get(key(steamid))
-    return res, err
+function DB.GetCharacters(steamID)
+    return Redis.lrange(key(steamID), 0, -1)
+end
+
+function DB.SaveCharacter(steamID, firstName, lastName)
+    local obj = { firstName = firstName, lastName = lastName }
+    local id = Redis.rpush(key(steamID), json.encode(obj))
+    obj.id = id
+    return obj
 end

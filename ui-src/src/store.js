@@ -2,7 +2,7 @@ import createStore from 'redux-zero'
 
 const initialState = {
   shown: false,
-  newUser: false,
+  characters: [],
   steamID: null,
 }
 

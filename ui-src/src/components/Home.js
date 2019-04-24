@@ -3,14 +3,19 @@ import { connect } from 'redux-zero/react'
 import actions from '../actions'
 
 export default connect(
-  ({ steamID, newUser }) => ({ steamID, newUser }),
+  ({ steamID, characters }) => ({ steamID, characters }),
   actions
-)(({ steamID, newUser, selectCharacter }) => (
+)(({ steamID, characters, selectCharacter }) => (
   <div>
-    <button onClick={selectCharacter}>Select</button> <br />
-    <h1>Steam ID</h1>
-    {steamID}
-    <h1>New user?</h1>
-    {newUser ? 'Yes' : 'No'}
+    <h1>Select Character</h1>
+    {characters.map(c => (
+      <div key={c.id}>
+        {c.id}: {c.firstName} {c.lastName}
+        <br />
+        <button onClick={() => selectCharacter(c.id)}>Select</button>
+      </div>
+    ))}
+    <br />
+    Steam ID: {steamID}
   </div>
 ))

@@ -14,11 +14,11 @@ window.addEventListener('message', e => {
     case 'open':
       boundActions.showUI(true)
       break
-    case 'steamid':
-      boundActions.setSteamID(e.data.steamid)
+    case 'steamID':
+      boundActions.setSteamID(e.data.steamID)
       break
-    case 'nousers':
-      boundActions.setNewUser(true)
+    case 'characters':
+      boundActions.setCharacters(e.data.characters)
       break
     default:
   }
