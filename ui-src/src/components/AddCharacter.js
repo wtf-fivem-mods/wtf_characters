@@ -21,7 +21,7 @@ export default connect(
           value={firstName}
           onChange={e => setFirstName(e.target.value)}
           placeholder="First name"
-          ype="text"
+          type="text"
           name="firstName"
           required
         />
@@ -30,7 +30,7 @@ export default connect(
           value={lastName}
           onChange={e => setLastName(e.target.value)}
           placeholder="Last name"
-          ype="text"
+          type="text"
           name="lastName"
           required
         />
