@@ -1,6 +1,8 @@
 client_scripts {
     '@wtf_redis/lib/redis.lua',
 
+    'lib/api.lua', -- 3rd party API
+
     'lib/db.lua',
     'lib/lib.lua',
     'lib/internal.lua',

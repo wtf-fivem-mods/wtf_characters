@@ -10,10 +10,10 @@ export default connect(
   <div>
     <h1>Select Character</h1>
     {characters.map(c => (
-      <div key={c.id}>
-        {c.id}: {c.firstName} {c.lastName}
+      <div key={c.idx}>
+        {c.firstName} {c.lastName}
         <br />
-        <button onClick={selectCharacter.bind(this, c.id)}>Select</button>
+        <button onClick={selectCharacter.bind(this, c.idx)}>Select</button>
       </div>
     ))}
     <br />

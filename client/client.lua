@@ -1,13 +1,24 @@
+local character = nil
+
+AddEventHandler("wtf_characters:getCharacter", function(cb)
+    while character == nil do
+        Citizen.Wait(500)
+    end
+    cb(character)
+end)
+
+function onCharacterSelected(c)
+    character = c
+    TriggerEvent("wtf_characters:receiveCharacter", c)
+end
+
 RegisterNUICallback('selectCharacter', function(data, cb)
     cb("ok")
-
-    local character = GetCharacter(data)
-    print('Character ID: '..tostring(character.id))
-    print('Character firstName: '..tostring(character.firstName))
-    print('Character lastName: '..tostring(character.lastName))
-
     SetNuiFocus(false, false)
     ResetCamera()
+
+    local c = GetCharacter(data)
+    onCharacterSelected(c)
 end)
 
 RegisterNUICallback('saveCharacter', function(data, cb)
@@ -15,10 +26,8 @@ RegisterNUICallback('saveCharacter', function(data, cb)
     SetNuiFocus(false, false)
     ResetCamera()
 
-    local character = SaveCharacter(data)
-    print('Character ID: '..tostring(character.id))
-    print('Character firstName: '..tostring(character.firstName))
-    print('Character lastName: '..tostring(character.lastName))
+    local c = SaveCharacter(data)
+    onCharacterSelected(c)
 end)
 
 local function onReceivedSteamID(steamID)

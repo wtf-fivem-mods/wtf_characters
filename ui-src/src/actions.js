@@ -7,10 +7,10 @@ const actions = store => ({
     }
     return { shown }
   },
-  selectCharacter: (state, id) =>
+  selectCharacter: (state, idx) =>
     fetch('http://wtf_characters/selectCharacter', {
       method: 'POST',
-      body: JSON.stringify({ steamID: state.steamID, id }),
+      body: JSON.stringify({ steamID: state.steamID, idx }),
     }).then(r => actions(store).showUI(state, false)),
   setSteamID: (state, steamID) => ({ steamID }),
   setCharacters: (state, characters) => ({ characters }),
