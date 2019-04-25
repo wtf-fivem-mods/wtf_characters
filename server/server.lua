@@ -1,6 +1,8 @@
+local steamID = null
+
 local function OnPlayerConnecting() --name, setKickReason, deferrals
     local source = source
-    local identifiers, steamID = GetPlayerIdentifiers(source)
+    local identifiers = GetPlayerIdentifiers(source)
 
     for _, v in pairs(identifiers) do
         if string.find(v, "steam") then
@@ -8,10 +10,17 @@ local function OnPlayerConnecting() --name, setKickReason, deferrals
             break
         end
     end
-
-    Citizen.SetTimeout(1000, function()
-        TriggerClientEvent("wtf_characters:steamID", source, steamID)
-    end)
 end
 
 AddEventHandler("playerConnecting", OnPlayerConnecting)
+
+RegisterNetEvent("wtf_characters:getSteamID")
+AddEventHandler("wtf_characters:getSteamID", function()
+    local source = source
+    Citizen.CreateThread(function()
+        while steamID == nil do
+            Citizen.Wait(100)
+        end
+        TriggerClientEvent("wtf_characters:receiveSteamID", source, steamID)
+    end)
+end)
