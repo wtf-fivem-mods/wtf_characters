@@ -1,6 +1,7 @@
-local steamID = null
 
-local function OnPlayerConnecting() --name, setKickReason, deferrals
+RegisterNetEvent("wtf_characters:getSteamID")
+AddEventHandler("wtf_characters:getSteamID", function()
+    local steamID = nil
     local source = source
     local identifiers = GetPlayerIdentifiers(source)
 
@@ -10,17 +11,6 @@ local function OnPlayerConnecting() --name, setKickReason, deferrals
             break
         end
     end
-end
 
-AddEventHandler("playerConnecting", OnPlayerConnecting)
-
-RegisterNetEvent("wtf_characters:getSteamID")
-AddEventHandler("wtf_characters:getSteamID", function()
-    local source = source
-    Citizen.CreateThread(function()
-        while steamID == nil do
-            Citizen.Wait(100)
-        end
-        TriggerClientEvent("wtf_characters:receiveSteamID", source, steamID)
-    end)
+    TriggerClientEvent("wtf_characters:receiveSteamID", source, steamID)
 end)
