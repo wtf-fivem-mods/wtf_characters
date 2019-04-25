@@ -71,10 +71,10 @@ WTF.WaitForCharacter()
 Citizen.CreateThread(function()
     local character = WTF.WaitForCharacter()
     -- the script waits on the above line until character is selected
-    print('WTF SANDBOX: Character IDX: '..tostring(character.idx))
-    print('WTF SANDBOX: Character UID: '..tostring(character.uid))
-    print('WTF SANDBOX: Character firstName: '..tostring(character.firstName))
-    print('WTF SANDBOX: Character lastName: '..tostring(character.lastName))
+    print('Character IDX: '..tostring(character.idx))
+    print('Character UID: '..tostring(character.uid))
+    print('Character firstName: '..tostring(character.firstName))
+    print('Character lastName: '..tostring(character.lastName))
     
     -- ... later on during the life of your resource
     
