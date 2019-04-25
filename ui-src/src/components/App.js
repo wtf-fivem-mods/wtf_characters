@@ -41,10 +41,19 @@ export default connect(
 })
 
 const App = styled.div`
-  width: 500px;
-  height: 720px;
-  background-color: white;
+  width: 400px;
+  height: 400px;
+  border-radius: 40px;
+  background-color: rgba(255, 255, 255, 0.8);
   display: ${props => (props.shown ? 'block' : 'none')};
+
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 `
 
 const GlobalStyle = createGlobalStyle`

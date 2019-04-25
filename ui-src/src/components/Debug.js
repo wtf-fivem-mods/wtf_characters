@@ -5,8 +5,8 @@ import styled, { createGlobalStyle } from 'styled-components/macro'
 import actions from '../actions'
 import gtaBg from './images/gtabg.png'
 
-const fakeCharacter = { id: 0, firstName: 'Tom', lastName: 'Foolery' }
-const fakeCharacter2 = { id: 1, firstName: 'Bradley', lastName: 'Booper' }
+const fakeCharacter = { idx: 0, firstName: 'Tom', lastName: 'Foolery' }
+const fakeCharacter2 = { idx: 1, firstName: 'Bradley', lastName: 'Booper' }
 
 export default connect(
   ({ shown }) => ({ shown }),
