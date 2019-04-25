@@ -1,6 +1,8 @@
 import React, { useState } from 'react'
 import { connect } from 'redux-zero/react'
+import styled from 'styled-components/macro'
 import actions from '../actions'
+import AnimButton from './AnimButton'
 
 export default connect(
   () => ({}),
@@ -16,35 +18,81 @@ export default connect(
     history.goBack()
   }
   return (
-    <div>
+    <StyledForm onSubmit={onSubmit}>
       <h1>Add Character</h1>
-      <form onSubmit={onSubmit}>
-        <input
-          value={firstName}
-          onChange={e => setFirstName(e.target.value)}
-          placeholder="First name"
-          type="text"
-          name="firstName"
-          required
-        />
-        <br />
-        <input
-          value={lastName}
-          onChange={e => setLastName(e.target.value)}
-          placeholder="Last name"
-          type="text"
-          name="lastName"
-          required
-        />
-        <br />
-        <button type="submit">Submit</button>
+      <StyledInput
+        value={firstName}
+        onChange={e => setFirstName(e.target.value)}
+        placeholder="First name"
+        type="text"
+        name="firstName"
+        required
+      />
+      <StyledInput
+        value={lastName}
+        onChange={e => setLastName(e.target.value)}
+        placeholder="Last name"
+        type="text"
+        name="lastName"
+        required
+      />
+      <Bottom>
+        <AnimButton type="submit">
+          <span>Add</span>
+        </AnimButton>
         {match && match.path === '/add_character' ? (
-          <>
-            <br />
-            <button onClick={goBack}>Go Back</button>
-          </>
+          <AnimButton onClick={goBack}>
+            <span>Back</span>
+          </AnimButton>
         ) : null}
-      </form>
-    </div>
+      </Bottom>
+    </StyledForm>
   )
 })
+
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+
+  height: 100%;
+
+  h1 {
+    align-self: center;
+  }
+`
+
+const StyledInput = styled.input`
+  background-color: #eaeaea;
+
+  width: 100%;
+  padding: 30px;
+  border: 0;
+  margin: 0;
+  outline: 0;
+
+  font-size: 18px;
+  color: #444;
+  text-align: center;
+  text-transform: uppercase;
+
+  transition: all 0.5s;
+
+  ::placeholder {
+    color: #999;
+  }
+
+  &:focus {
+    background-color: #fff;
+  }
+
+  &:after {
+    transition: all 0.25s;
+  }
+`
+
+const Bottom = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+`

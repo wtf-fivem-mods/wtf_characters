@@ -41,15 +41,18 @@ export default connect(
 })
 
 const App = styled.div`
+  box-sizing: border-box;
+
   width: 400px;
   height: 400px;
-  border-radius: 40px;
-  background-color: rgba(255, 255, 255, 0.8);
   display: ${props => (props.shown ? 'block' : 'none')};
 
-  box-sizing: border-box;
+  background-color: rgba(255, 255, 255, 0.8);
+
   padding: 0;
   margin: 0;
+  clip-path: inset(0 0 0 0 round 40px);
+
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
