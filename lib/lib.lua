@@ -13,7 +13,7 @@ function GetCharacter(data)
     end
     local obj = json.decode(rawCharacter)
     obj.idx = data.idx
-    obj.uid = data.steamID..'-'..data.idx
+    obj.uid = data.steamID .. "-" .. data.idx
     return character:new(obj)
 end
 
@@ -26,7 +26,7 @@ function GetCharacters(steamID)
     for i, v in ipairs(rawCharacters) do
         local obj = json.decode(v)
         obj.idx = i - 1 -- js/redis is 0 index
-        obj.uid = steamID..'-'..obj.idx
+        obj.uid = steamID .. "-" .. obj.idx
         local c = character:new(obj)
         table.insert(characters, c)
     end
@@ -35,6 +35,6 @@ end
 
 function SaveCharacter(data)
     local c = DB.SaveCharacter(data.steamID, data.firstName, data.lastName)
-    c.uid = data.steamID..'-'..c.idx
+    c.uid = data.steamID .. "-" .. c.idx
     return c
 end

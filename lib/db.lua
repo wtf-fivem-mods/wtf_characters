@@ -11,7 +11,7 @@ function DB.GetCharacters(steamID)
 end
 
 function DB.SaveCharacter(steamID, firstName, lastName)
-    local obj = { firstName = firstName, lastName = lastName }
+    local obj = {firstName = firstName, lastName = lastName}
     local idx = Redis.rpush(key(steamID), json.encode(obj))
     obj.idx = idx - 1
     return obj
