@@ -1,28 +1,40 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { connect } from 'redux-zero/react'
 import styled from 'styled-components/macro'
-import actions from '../actions'
+import { useAppActions, useAppState } from '../context'
 import AnimButton from './AnimButton'
 
-export default connect(
-  ({ characters }) => ({ characters }),
-  actions
-)(({ characters, selectCharacter }) => (
-  <Container>
-    <h1>Select Character</h1>
-    {characters.map(c => (
-      <Character key={c.idx} {...c} onSelect={selectCharacter} />
-    ))}
-    <Bottom>
-      <Link to="/add_character">
-        <AnimButton>
-          <span>Add Character</span>
-        </AnimButton>
-      </Link>
-    </Bottom>
-  </Container>
-))
+export default () => {
+  const { showUI } = useAppActions()
+  const { characters, steamID } = useAppState()
+
+  function handleCharacterSelect(idx) {
+    fetch('http://wtf_characters/selectCharacter', {
+      method: 'POST',
+      body: JSON.stringify({ steamID: steamID, idx }),
+    }).then(r => showUI(false))
+  }
+
+  return (
+    <Container>
+      <h1>Select Character</h1>
+      {characters.map(c => (
+        <Character
+          key={c.idx}
+          {...c}
+          onSelect={() => handleCharacterSelect(c.idx)}
+        />
+      ))}
+      <Bottom>
+        <Link to="/add_character">
+          <AnimButton>
+            <span>Add Character</span>
+          </AnimButton>
+        </Link>
+      </Bottom>
+    </Container>
+  )
+}
 
 const Character = ({ idx, firstName, lastName, onSelect }) => (
   <AnimButton onClick={onSelect.bind(this, idx)}>

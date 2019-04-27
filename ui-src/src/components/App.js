@@ -1,46 +1,54 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route } from 'react-router'
-import { connect } from 'redux-zero/react'
+import { HashRouter as Router } from 'react-router-dom'
 import styled, { createGlobalStyle } from 'styled-components/macro'
-import actions from '../actions'
+import messageListener from '../messageListener'
+import { useAppActions, useAppState } from '../context'
+import { IsDev } from '../state'
 import AddCharacter from './AddCharacter'
+import Debug from './Debug'
 import Home from './Home'
 
-export default connect(
-  ({ steamID, shown, characters }) => ({
-    shown,
-    hasSteamID: steamID !== null,
-    hasCharacters: characters.length > 0,
-  }),
-  actions
-)(({ hasSteamID, shown, hasCharacters, showUI }) => {
-  function renderRoot() {
-    return hasCharacters ? <Home /> : <AddCharacter />
-  }
-  function dismiss() {
-    showUI(false)
-  }
-  return (
-    <>
-      <GlobalStyle />
-      <App shown={shown}>
-        {hasSteamID ? (
-          <>
-            <Route exact path="/" render={renderRoot} />
-            <Route path="/add_character" component={AddCharacter} />
-          </>
-        ) : (
-          <>
-            <h1>No Steam ID</h1>
-            <button onClick={dismiss}>Dismiss</button>
-          </>
-        )}
-      </App>
-    </>
-  )
-})
+export default () => {
+  const actions = useAppActions()
+  useEventListener('message', messageListener(actions))
+  const { steamID, shown, characters } = useAppState()
 
-const App = styled.div`
+  const hasSteamID = steamID !== null
+  const hasCharacters = characters.length > 0
+
+  return (
+    <Router>
+      <GlobalStyle />
+      {IsDev ? <Debug /> : null}
+      <StyledApp shown={shown}>
+        {hasSteamID ? (
+          hasCharacters ? (
+            <>
+              <Route exact path="/" component={Home} />
+              <Route path="/add_character" component={AddCharacter} />
+            </>
+          ) : (
+            <AddCharacter />
+          )
+        ) : (
+          <h1>No Steam ID</h1>
+        )}
+      </StyledApp>
+    </Router>
+  )
+}
+
+function useEventListener(type, listener) {
+  useEffect(() => {
+    window.addEventListener(type, listener)
+    return () => {
+      window.removeEventListener(type, listener)
+    }
+  })
+}
+
+const StyledApp = styled.div`
   box-sizing: border-box;
 
   width: 400px;

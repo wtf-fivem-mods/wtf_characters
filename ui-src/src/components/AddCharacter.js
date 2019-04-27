@@ -1,24 +1,24 @@
 import React, { useState } from 'react'
-import { connect } from 'redux-zero/react'
 import styled from 'styled-components/macro'
-import actions from '../actions'
+import { useAppActions, useAppState } from '../context'
 import AnimButton from './AnimButton'
 
-export default connect(
-  () => ({}),
-  actions
-)(({ saveCharacter, match, history }) => {
+export default ({ history, match }) => {
+  const { showUI } = useAppActions()
+  const { steamID } = useAppState()
   const [firstName, setFirstName] = useState('')
   const [lastName, setLastName] = useState('')
-  function onSubmit(e) {
+
+  function handleOnSubmit(e) {
     e.preventDefault()
-    saveCharacter(firstName, lastName)
+    fetch('http://wtf_characters/saveCharacter', {
+      method: 'POST',
+      body: JSON.stringify({ steamID: steamID, firstName, lastName }),
+    }).then(r => showUI(false))
   }
-  function goBack() {
-    history.goBack()
-  }
+
   return (
-    <StyledForm onSubmit={onSubmit}>
+    <StyledForm onSubmit={handleOnSubmit}>
       <h1>Add Character</h1>
       <StyledInput
         value={firstName}
@@ -37,18 +37,18 @@ export default connect(
         required
       />
       <Bottom>
-        <AnimButton type="submit">
+        <AnimButton as="button" type="submit">
           <span>Add</span>
         </AnimButton>
         {match && match.path === '/add_character' ? (
-          <AnimButton onClick={goBack}>
+          <AnimButton onClick={() => history.goBack()}>
             <span>Back</span>
           </AnimButton>
         ) : null}
       </Bottom>
     </StyledForm>
   )
-})
+}
 
 const StyledForm = styled.form`
   display: flex;

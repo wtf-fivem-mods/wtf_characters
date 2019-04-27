@@ -53,11 +53,11 @@ RegisterNUICallback(
     "selectCharacter",
     function(data, cb)
         cb("ok")
-        SetNuiFocus(false, false)
-        ResetCamera()
-
         local c = GetCharacter(data)
         onCharacterSelected(c)
+
+        SetNuiFocus(false, false)
+        ResetCamera()
     end
 )
 

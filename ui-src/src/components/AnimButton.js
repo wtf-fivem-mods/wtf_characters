@@ -9,6 +9,8 @@ export default styled.section`
   // float: left;
   padding: 40px;
   transition: all 0.5s;
+  outline: 0;
+  border: 0;
 
   cursor: pointer;
   user-select: none;
