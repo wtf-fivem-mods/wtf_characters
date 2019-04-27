@@ -1,4 +1,4 @@
-import { createDraft, finishDraft } from 'immer'
+import produce from 'immer'
 import React from 'react'
 import { actions, initialState } from './state'
 
@@ -7,13 +7,10 @@ const AppState = React.createContext()
 export const useAppActions = () => React.useContext(AppActions)
 export const useAppState = () => React.useContext(AppState)
 
-export const reducer = (state, action) => {
-  const draft = createDraft(state)
-  action(draft)
-  return finishDraft(draft)
-}
+const reducer = (state, action) => produce(state, draft => action(draft))
 
-export const bindActions = (actions, dispatch) => {
+const bindActions = (actions, dispatch) => {
+  if (foo !== null) return foo
   let bound = {}
   for (let name in actions) {
     bound[name] = (...args) => {
