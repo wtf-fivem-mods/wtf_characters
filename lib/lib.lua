@@ -7,26 +7,22 @@ function character:new(o)
 end
 
 function GetCharacter(data)
-    local rawCharacter = DB.GetCharacter(data.steamID, data.idx)
+    local rawCharacter = DB.GetCharacter(data.steamID, data.uid)
     if rawCharacter == nil then
         return nil
     end
     local obj = json.decode(rawCharacter)
-    obj.idx = data.idx
-    obj.uid = data.steamID .. "-" .. data.idx
     return character:new(obj)
 end
 
 function GetCharacters(steamID)
     local rawCharacters = DB.GetCharacters(steamID)
-    if #rawCharacters == 0 then
+    if next(rawCharacters) == nil then
         return nil
     end
     local characters = {}
-    for i, v in ipairs(rawCharacters) do
+    for _, v in pairs(rawCharacters) do
         local obj = json.decode(v)
-        obj.idx = i - 1 -- js/redis is 0 index
-        obj.uid = steamID .. "-" .. obj.idx
         local c = character:new(obj)
         table.insert(characters, c)
     end
@@ -34,7 +30,7 @@ function GetCharacters(steamID)
 end
 
 function SaveCharacter(data)
-    local c = DB.SaveCharacter(data.steamID, data.firstName, data.lastName)
-    c.uid = data.steamID .. "-" .. c.idx
+    local uid = DB.GenerateUID() + Config.IDOffset
+    local c = DB.SaveCharacter(data.steamID, uid, data.firstName, data.lastName)
     return c
 end

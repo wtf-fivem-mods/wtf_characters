@@ -8,10 +8,10 @@ export default () => {
   const { showUI } = useAppActions()
   const { characters, steamID } = useAppState()
 
-  function handleCharacterSelect(idx) {
+  function handleCharacterSelect(uid) {
     fetch('http://wtf_characters/selectCharacter', {
       method: 'POST',
-      body: JSON.stringify({ steamID: steamID, idx }),
+      body: JSON.stringify({ steamID: steamID, uid }),
     }).then(r => showUI(false))
   }
 
@@ -20,9 +20,9 @@ export default () => {
       <h1>Select Character</h1>
       {characters.map(c => (
         <Character
-          key={c.idx}
+          key={c.uid}
           {...c}
-          onSelect={() => handleCharacterSelect(c.idx)}
+          onSelect={() => handleCharacterSelect(c.uid)}
         />
       ))}
       <Bottom>
@@ -36,8 +36,8 @@ export default () => {
   )
 }
 
-const Character = ({ idx, firstName, lastName, onSelect }) => (
-  <AnimButton onClick={onSelect.bind(this, idx)}>
+const Character = ({ uid, firstName, lastName, onSelect }) => (
+  <AnimButton onClick={onSelect.bind(this, uid)}>
     <span>
       {firstName} {lastName}
     </span>

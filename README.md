@@ -32,6 +32,12 @@ The API is all client side you don't need to manage callbacks or notifications b
 
 ```lua
 
+--- in Config.lua
+-- Useful for making uids relative to one another so you don't have characters
+-- with uid 4 and another with 120, instead w/ the default offset it would be
+-- uid 1004 and 1120-- i.e. same digits.
+Config.IDOffset = 1000 -- you can set this to whatever number or 0 to not have an offset
+
 --- WTF.GetCharacter returns the current player's character
 -- This function may return nil if the player hasn't yet selected
 -- their character to play. You can use this in your script after
@@ -59,8 +65,7 @@ WTF.WaitForCharacter()
 --- Character object
 -- The character returned from the API has the following structure:
 {
-  idx, -- used internally, ignore and definitely don't change
-  uid, -- a unique id based on steamid and idx, use this to persist data related to this character
+  uid, -- a unique id, use this to persist data related to this character
   firstName,
   lastName,
 }
@@ -71,19 +76,18 @@ WTF.WaitForCharacter()
 Citizen.CreateThread(function()
     local character = WTF.WaitForCharacter()
     -- the script waits on the above line until character is selected
-    print('Character IDX: '..tostring(character.idx))
     print('Character UID: '..tostring(character.uid))
     print('Character firstName: '..tostring(character.firstName))
     print('Character lastName: '..tostring(character.lastName))
-    
+
     -- ... later on during the life of your resource
-    
+
     while true do
         Citizen.Wait(1)
         local character = WTF.GetCharacter() -- returns instantly
         -- e.g. render something
     end
-    
+
     -- You can always call WTF.WaitForCharacter() if you're unsure if
     -- the character is available. It will return instantly if it is.
 end)
@@ -92,10 +96,10 @@ end)
 # Dependencies
 
 - Redis / [wtf_redis]
-    - By default, wtf_characters, uses Redis and expects it to be running on the game server. See [wtf_redis] for
+  - By default, wtf_characters, uses Redis and expects it to be running on the game server. See [wtf_redis] for
     more info.
-    - The code was written to support additional backends (i.e. ESX), feel free to contribute if you'd like.
-    
+  - The code was written to support additional backends (i.e. ESX), feel free to contribute if you'd like.
+
 # Download, Building and Installation
 
 wtf_characters doesn't currently have a release. If you'd like to use it in its early stage you'll have to build it.
@@ -103,19 +107,20 @@ wtf_characters doesn't currently have a release. If you'd like to use it in its 
 ## Requirements
 
 - UI requirements
+
   - Node v8.15.1 (you can use a later version, but this was used for best compatability with FiveM)
   - yarn v1.15.2 (package manager, alternative to NPM, but you can use NPM if you'd like)
 
     ```shell
     # if you don't have yarn installed
     $ npm install -g yarn
-    
+
     # from your resources folder
     $ cd "[wtf]/wtf_characters/ui-src"
-    
+
     # install deps
     $ yarn
-    
+
     # build
     $ yarn build
     ```
@@ -125,6 +130,7 @@ wtf_characters doesn't currently have a release. If you'd like to use it in its 
   - No configuration necessary
 
 ## Getting the code
+
 ```
 cd resources
 git clone https://github.com/wtf-fivem-mods/wtf_characters [wtf]/wtf_characters/
