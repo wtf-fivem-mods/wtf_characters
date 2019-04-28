@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 import { Link } from 'react-router-dom'
 import styled, { createGlobalStyle } from 'styled-components/macro'
 import { useAppActions, useAppState } from '../context'
@@ -7,30 +7,30 @@ import gtaBg from './images/gtabg.png'
 const fakeCharacter = { idx: 0, firstName: 'Tom', lastName: 'Foolery' }
 const fakeCharacter2 = { idx: 1, firstName: 'Bradley', lastName: 'Booper' }
 
-export default () => {
-  const { showUI, setSteamID, setCharacters } = useAppActions()
+export default memo(() => (
+  <Header>
+    <GTABackgroundStyle />
+    <DebugItems />
+  </Header>
+))
+
+function DebugItems() {
   const { shown } = useAppState()
+  const { setSteamID, setCharacters, showUI } = useAppActions()
   return (
-    <Header>
-      <GTABackgroundStyle />
-      <nav>
-        <span>DEBUG MENU</span>
-        <Link to="/">Home</Link>
-        <Link to="/add_character">Add Character</Link>
-        <button onClick={() => setSteamID('123')}>Set SteamID</button>
-        <button onClick={() => setCharacters([fakeCharacter])}>
-          1 Character
-        </button>
-        <button onClick={() => setCharacters([fakeCharacter, fakeCharacter2])}>
-          2 Characters
-        </button>
-        {shown ? (
-          <button onClick={() => showUI(false)}>Hide</button>
-        ) : (
-          <button onClick={() => showUI(true)}>Show</button>
-        )}
-      </nav>
-    </Header>
+    <nav>
+      <span>DEBUG MENU</span>
+      <Link to="/">Home</Link>
+      <Link to="/add_character">Add Character</Link>
+      <button onClick={() => setSteamID('123')}>Set SteamID</button>
+      <button onClick={() => setCharacters([fakeCharacter])}>
+        1 Character
+      </button>
+      <button onClick={() => setCharacters([fakeCharacter, fakeCharacter2])}>
+        2 Characters
+      </button>
+      <button onClick={() => showUI(!shown)}>{shown ? 'Hide' : 'Show'}</button>
+    </nav>
   )
 }
 

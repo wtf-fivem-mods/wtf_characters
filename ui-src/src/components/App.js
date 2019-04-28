@@ -10,32 +10,35 @@ import Debug from './Debug'
 import Home from './Home'
 
 export default () => {
-  const actions = useAppActions()
-  useEventListener('message', messageListener(actions))
-  const { steamID, shown, characters } = useAppState()
-
-  const hasSteamID = steamID !== null
-  const hasCharacters = characters.length > 0
+  const { shown, steamID, characters } = useAppState()
 
   return (
-    <Router>
+    <Container shown={shown}>
+      {steamID === null ? (
+        <h1>No Steam ID</h1>
+      ) : characters.length === 0 ? (
+        <AddCharacter />
+      ) : (
+        <>
+          <Route exact path="/" component={Home} />
+          <Route path="/add_character" component={AddCharacter} />
+        </>
+      )}
+    </Container>
+  )
+}
+
+function Container({ children, shown }) {
+  const actions = useAppActions()
+  useEventListener('message', messageListener(actions))
+  return (
+    <>
       <GlobalStyle />
-      {IsDev ? <Debug /> : null}
-      <StyledApp shown={shown}>
-        {hasSteamID ? (
-          hasCharacters ? (
-            <>
-              <Route exact path="/" component={Home} />
-              <Route path="/add_character" component={AddCharacter} />
-            </>
-          ) : (
-            <AddCharacter />
-          )
-        ) : (
-          <h1>No Steam ID</h1>
-        )}
-      </StyledApp>
-    </Router>
+      <Router>
+        {IsDev ? <Debug /> : null}
+        {shown ? <Content>{children}</Content> : null}
+      </Router>
+    </>
   )
 }
 
@@ -45,15 +48,14 @@ function useEventListener(type, listener) {
     return () => {
       window.removeEventListener(type, listener)
     }
-  })
+  }, [])
 }
 
-const StyledApp = styled.div`
+const Content = styled.div`
   box-sizing: border-box;
 
   width: 400px;
   height: 400px;
-  display: ${props => (props.shown ? 'block' : 'none')};
 
   background-color: rgba(255, 255, 255, 0.8);
 
