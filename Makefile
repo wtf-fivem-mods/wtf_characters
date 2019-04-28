@@ -18,7 +18,7 @@ README.md: $(SOURCES) $(UI_CODE)
 	copy /b README.md +,,
 
 $(UI_BUNDLE): $(UI_CODE)
-	cd ui-src && yarn build
+	cd ui-src && yarn && yarn build
 
 check-devserver:
 	@netstat -nao | findstr "LISTENING" | findstr "0:3000" >nul 2>nul && (echo dev-server running, stopping 1>&2 && exit 1) || exit 0
