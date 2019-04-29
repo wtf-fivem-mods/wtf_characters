@@ -42,7 +42,7 @@ Config.IDOffset = 1000 -- you can set this to whatever number or 0 to not have a
 -- This function may return nil if the player hasn't yet selected
 -- their character to play. You can use this in your script after
 -- you're sure they've entered the game. Use WTF.WaitForCharacter()
--- in your resource's startup code.
+-- or WTF.OnCharacterSelect() in your resource's startup code.
 --
 -- This function is performant and can be included in game loops.
 --
@@ -62,35 +62,85 @@ WTF.GetCharacter()
 -- Calling this function outside of any thread will result in an error.
 WTF.WaitForCharacter()
 
+--- WTF.OnCharacterSelect(callback)
+-- Useful function used to react to player being selected (or reselected).
+-- Pass a callback which receives `character` as an argument.
+-- This function can be called outside of a thread.
+WTF.OnCharacterSelect(cb)
+
+--- WTF.RegisterCharacterEvent(event, callback)
+-- You can register custom events that other resources can trigger for your
+-- character. The `event` parameter is typically a string.
+--
+-- For example: wtf_banking may send an event "wtf_banking:receiveTransfer"
+-- which allows you to register a callback to react whenever this event is
+-- triggered.
+--
+-- The `callback` parameter receives a `data` argument with the event's data.
+WTF.RegisterCharacterEvent(event, callback)
+
+--- WTF.TriggerCharacterEvent(uid, event, data)
+-- The counter to RegisterCharacterEvent. You can trigger character events for
+-- other online characters, all you need is their character's `uid`.
+--
+-- The event is the name of the event you'd like to trigger
+-- (i.e. in the last example, "wtf_banking:receiveTransfer") and
+-- `data` is whatever data/object to send with the event
+-- (i.e. { from = 1234, amount = 500 })
+WTF.TriggerCharacterEvent(uid, event, data)
+
 --- Character object
 -- The character returned from the API has the following structure:
 {
-  uid, -- a unique id, use this to persist data related to this character
-  firstName,
-  lastName,
+    uid, -- a unique id, use this to persist data related to this character
+    firstName,
+    lastName,
 }
 
 --- Example
 -- This is an example client side lua:
 
-Citizen.CreateThread(function()
-    local character = WTF.WaitForCharacter()
-    -- the script waits on the above line until character is selected
-    print('Character UID: '..tostring(character.uid))
-    print('Character firstName: '..tostring(character.firstName))
-    print('Character lastName: '..tostring(character.lastName))
-
-    -- ... later on during the life of your resource
-
-    while true do
-        Citizen.Wait(1)
-        local character = WTF.GetCharacter() -- returns instantly
-        -- e.g. render something
+WTF.OnCharacterSelect(
+    function(character)
+        print("Character UID: " .. tostring(character.uid))
+        print("Character firstName: " .. tostring(character.firstName))
+        print("Character lastName: " .. tostring(character.lastName))
     end
+)
 
-    -- You can always call WTF.WaitForCharacter() if you're unsure if
-    -- the character is available. It will return instantly if it is.
-end)
+WTF.RegisterCharacterEvent(
+    "wtf_banking:receiveTransfer",
+    function(data)
+        print("We got money! " .. data.amount)
+    end
+)
+
+-- alternative to WTF.OnCharacterSelect(), here's WTF.WaitForCharacter()
+
+Citizen.CreateThread(
+    function()
+        local character = WTF.WaitForCharacter()
+        -- the script waits on the above line until character is selected
+        print("Character UID: " .. tostring(character.uid))
+        print("Character firstName: " .. tostring(character.firstName))
+        print("Character lastName: " .. tostring(character.lastName))
+
+        -- ... later on during the life of your resource
+
+        while true do
+            Citizen.Wait(1)
+            local character = WTF.GetCharacter() -- returns instantly
+            -- e.g. render something
+        end
+
+        -- You can always call WTF.WaitForCharacter() if you're unsure if
+        -- the character is available. It will return instantly if it is.
+
+        -- Example of triggering a character event
+        local data = {from = 1234, amount = 500}
+        WTF.TriggerCharacterEvent(1337, "wtf_banking:receiveTransfer", data)
+    end
+)
 ```
 
 # Dependencies
