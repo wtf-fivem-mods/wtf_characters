@@ -5,14 +5,17 @@ function WTF.GetCharacter()
     return character
 end
 
-function WTF.WaitForCharacter()
+function WTF.WaitForCharacter(uid)
+    -- if no uid and we have a character
+    -- return that character right away
     local c = WTF.GetCharacter()
-    if c ~= nil then
+    if uid == nil and c ~= nil then
         return c
     end
     local p = promise.new()
     TriggerEvent(
         "wtf_characters:getCharacter",
+        uid or -1, -- -1 to prevent nil argument
         function(c1)
             p:resolve(c1)
         end

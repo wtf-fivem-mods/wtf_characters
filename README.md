@@ -58,9 +58,12 @@ WTF.GetCharacter()
 -- this function and the code below will execute after the character is
 -- selected.
 --
+-- You can optionally specify a `uid` parameter to lookup another character by
+-- their UID. If you do not specify a `uid` then it assumes current player.
+--
 -- NOTE: this must be called within a Citizen.CreateThread(function() ... end)
 -- Calling this function outside of any thread will result in an error.
-WTF.WaitForCharacter()
+WTF.WaitForCharacter(uid)
 
 --- WTF.OnCharacterSelect(callback)
 -- Useful function used to react to player being selected (or reselected).

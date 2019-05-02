@@ -36,11 +36,18 @@ AddEventHandler(
 
 AddEventHandler(
     "wtf_characters:getCharacter",
-    function(cb)
-        while character == nil do
-            Citizen.Wait(500)
+    function(uid, cb)
+        -- if no uid then wait for
+        -- character selection
+        if uid == -1 then
+            while character == nil do
+                Citizen.Wait(500)
+            end
+            return cb(character)
         end
-        cb(character)
+
+        -- lookup character by id
+        return cb(GetCharacter(uid))
     end
 )
 
