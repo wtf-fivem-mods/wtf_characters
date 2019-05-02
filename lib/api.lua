@@ -42,7 +42,12 @@ function WTF.RegisterCharacterEvent(event, cb)
         characterEventCbs[event] = {}
     end
     table.insert(characterEventCbs[event], cb)
-    TriggerServerEvent("wtf_characters:registerEvent", character.uid, event)
+    Citizen.CreateThread(
+        function()
+            local c = WTF.WaitForCharacter()
+            TriggerServerEvent("wtf_characters:registerEvent", c.uid, event)
+        end
+    )
 end
 
 RegisterNetEvent("wtf_characters:receiveEvent")
