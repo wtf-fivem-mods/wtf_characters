@@ -53,7 +53,7 @@ RegisterNUICallback(
     "selectCharacter",
     function(data, cb)
         cb("ok")
-        local c = GetCharacter(data)
+        local c = GetCharacter(data.uid)
         onCharacterSelected(c)
 
         SetNuiFocus(false, false)

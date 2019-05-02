@@ -6,12 +6,12 @@ import AnimButton from './AnimButton'
 
 export default () => {
   const { showUI } = useAppActions()
-  const { characters, steamID } = useAppState()
+  const { characters } = useAppState()
 
   function handleCharacterSelect(uid) {
     fetch('http://wtf_characters/selectCharacter', {
       method: 'POST',
-      body: JSON.stringify({ steamID: steamID, uid }),
+      body: JSON.stringify({ uid }),
     }).then(r => showUI(false))
   }
 

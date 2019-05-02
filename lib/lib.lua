@@ -6,8 +6,8 @@ function character:new(o)
     return o
 end
 
-function GetCharacter(data)
-    local rawCharacter = DB.GetCharacter(data.steamID, data.uid)
+function GetCharacter(uid)
+    local rawCharacter = DB.GetCharacter(uid)
     if rawCharacter == nil then
         return nil
     end
