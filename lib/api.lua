@@ -1,6 +1,23 @@
 WTF = WTF or {}
 local character = nil
 
+AddEventHandler(
+    "onClientResourceStart",
+    function(resourceName)
+        if GetCurrentResourceName() ~= resourceName then
+            return
+        end
+
+        TriggerEvent(
+            "wtf_characters:getCharacter",
+            -1,
+            function(c)
+                character = c
+            end
+        )
+    end
+)
+
 function WTF.GetCharacter()
     return character
 end
